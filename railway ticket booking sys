@@ -1,0 +1,181 @@
+import time
+import datetime
+import json
+
+start = 0
+sum_amount = 0
+routes = ["1.Chennai-->Delhi ", "2.Delhi-->Chennai"]
+seatscd = {"1AC": 100, "2AC": 100, "3AC": 100, "SLEEPER": 100}
+seatsdc = {"1AC": 100, "2AC": 100, "3AC": 100, "SLEEPER": 100}
+price_fare = {"1AC": 5000, "2AC": 4000, "3AC": 3000, "SLEEPER": 2000}
+
+travellers = {}
+sum_amount=0
+
+while start != 5:
+    time.sleep(1)
+    print("###########--WELCOME TO RAILWAY TICKET RESERVATION SYSTEM--########### ")
+    print('''          1.ADMIN LOGIN
+          2.BOOK A TRAIN TICKET
+          3.FIND A LOST TICKET
+          4.GIVE A FEEDBACK
+          5.EXIT''')
+    print("######################################################################")
+    print()
+    print()
+    choice = int(input("Enter a choice from the above provided choices: "))
+
+    if choice == 1:
+        userid = input("Enter the USER ID: ")
+        if userid == "ANSH":
+            password = input("Enter the password: ")
+            if password == "0000":
+                print("ADMIN Access granted !!!")
+                print('''                      1.To change price fare of coaches
+                      2.Total amount collected by e-booking system
+                      ''')
+                adminchoice = int(input("Enter your choice: "))
+                if adminchoice == 1:
+                    print(json.dumps(price_fare, indent=2))
+                    change_fare = input("Enter the coach who's price needs to be changed: ")
+                    new_fare = int(input("Enter the new fare for the selected coach: "))
+                    if change_fare in ["1AC", "2AC", "3AC", "SLEEPER"]:
+                        price_fare[change_fare] = new_fare
+                        print("The fare for the particular chosen coach has been changed successfully")
+                    else:
+                        print("Wrong coach entered")
+                if adminchoice == 2:
+                    print("Total amount colected till now is: ",sum_amount)
+
+    if choice == 2:
+        name = input("ENTER YOUR NAME: ")
+        age = int(input("ENTER YOUR AGE: "))
+        mob_no = int(input("Enter your phone number: "))
+        print(json.dumps(routes, indent=2))
+        travelroute = int(input(" Make a choice: "))
+        if travelroute == 1:
+            print("Coaches with their seat availability")
+            print(json.dumps(seatscd, indent=2))
+            print("Pricing of each coach is given below")
+            print(json.dumps(price_fare, indent=2))
+
+            coach = input("Enter the coach in which you wanna travel: ")
+            if coach in ["1AC", "2AC", "3AC", "SLEEPER"]:
+                x = seatscd[coach]
+                if x > 0:
+                    a = x - 1
+                    seatscd[coach] = a
+                else:
+                    print("You cannot book your ticket as no seats are available")
+            else:
+                print("Wrong input given")
+
+        if travelroute == 2:
+            print("Coaches with their seat availability")
+            print(json.dumps(seatsdc, indent=2))
+            print("Pricing of each coach is given below")
+            print(json.dumps(price_fare, indent=2))
+
+            coach = input("Enter the coach in which you wanna travel: ")
+            if coach in ["1AC", "2AC", "3AC", "SLEEPER"]:
+                x = seatsdc[coach]
+                if x > 0:
+                    a = x - 1
+                    seatsdc[coach] = a
+                else:
+                    print("You cannot book your ticket as no seats are available")
+            else:
+                print("Wrong input given")
+
+            
+        time.sleep(2)
+        print()
+        print("#################-->TICKET BOOKED<--#################")
+        time.sleep(1.5)
+        print(routes[travelroute - 1])
+        time.sleep(1.5)
+        print("PASSENGER'S NAME         :", name)
+        time.sleep(1.5)
+        print("PASSENGER'S AGE          :", age)
+        time.sleep(1.5)
+        print("PASSENGER'S MOBILE NUMBER:", mob_no)
+        time.sleep(1.5)
+        print("COACH CHOOSEN            :", coach)
+        time.sleep(1.5)
+        print("BASE TICKET FARE         :", price_fare[coach])
+        time.sleep(1.5)
+        print("GST 18%                  :", 0.18 * price_fare[coach])
+        time.sleep(1.5)
+        amount = price_fare[coach] + 0.18 * price_fare[coach]
+        print("TOTAL TICKET FARE        :", amount)
+        time.sleep(1.5)
+        print("TIME OF BOOKING          :", datetime.datetime.now())
+        time.sleep(1.5)
+        print("#####################################################")
+        print()
+        print("THANKS FOR BOOKING TICKET WITH US, HAPPY JOURNEY !!!")
+        print()
+        time.sleep(2)
+        travellers[mob_no] = {"name": name, "age": age, "mob_no": mob_no, "coach": coach}
+
+        sum_amount=sum_amount+price_fare[coach] + 0.18 * price_fare[coach]
+
+
+    if choice == 3:
+        FIND = int(input("Enter your mobile number to retrieve your booked ticket: "))
+        x = travellers.get(FIND, None)
+        if x:
+            time.sleep(2)
+            print()
+            print("#################-->TICKET BOOKED<--#################")
+            time.sleep(1.5)
+            print("PASSENGER'S MOBILE NUMBER:", x["mob_no"])
+            time.sleep(1.5)
+            print("PASSENGER'S NAME         :", x["name"])
+            time.sleep(1.5)
+            print("PASSENGER'S AGE          :", x["age"])
+            time.sleep(1.5)
+            print("COACH CHOSEN             :", x["coach"])
+            time.sleep(1.5)
+            print("BASE TICKET FARE         :",price_fare[x["coach"]])
+            time.sleep(1.5)
+            print("GST 18%                  :",0.18*price_fare[x["coach"]])
+            time.sleep(1.5)
+            print("TOTAL TICKET FARE        :",price_fare[x["coach"]]+0.18*price_fare[x["coach"]])
+            time.sleep(1.5)
+            print("TIME OF BOOKING          :",datetime.datetime.now())
+            time.sleep(1.5)
+            print("#####################################################")
+            print()
+            print("THANKS FOR BOOKING TICKET WITH US, HAPPY JOURNEY !!!")
+            print()
+            time.sleep(2)
+            
+            
+    if choice==4:
+        rating=int(input('''                         1 for POOR \n
+                             2 for FAIR \n
+                             3 for GOOD \n
+                             4 for VERY GOOD \n
+                             5 for EXCELLENT \n                         
+                             
+    Rate us between 1-5 : '''))
+        message=(input("Please leave a message for us in improving our services: \n"))
+        if rating==1:
+                print("Thanks for your response, we will try our best to improve our services.")
+                
+        if rating==2:
+                print("Thanks for your response,we will look into our flaws")
+                
+        if rating==3:
+                print("Thanks for your response, we will keep on improving")
+                
+        if rating==4:
+                print("Thanks for your response,we will are glad to see u liked our services")
+                
+        if rating==5:
+                print("Thanks for your response, kindly visit us again \n")
+                
+            
+    if choice==5:
+            start=5
